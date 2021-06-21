@@ -72,9 +72,9 @@
 		var year = document.getElementById("searchYr").value;
 		var titleReq = new XMLHttpRequest();
 		if (year != "") {
-			var url = "http://www.omdbapi.com/?s="+title+"&y="+year+"&apikey=30c83495";
+			var url = "https://www.omdbapi.com/?s="+title+"&y="+year+"&apikey=30c83495";
 		} else {
-			var url = "http://www.omdbapi.com/?s="+title+"&apikey=30c83495";
+			var url = "https://www.omdbapi.com/?s="+title+"&apikey=30c83495";
 		}
 		
 		titleReq.open("GET", url, true);
