@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<link href="style.css" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	
+<style></style>
+</head>
+<body onload = "init();">
+	<!-- Toolbar -->
+	
+	<div class="toolbar" role="banner">
+	  <i class="material-icons">movie</i>
+	  <a href = "index.html">Movies</a>
+	</div>
+
+	<div class="content" role="main">
+		<i id = "searchIcon" class="material-icons">search</i><br/>
+		<input id = "searchTitle" class="form-control mr-sm-2" type="text" placeholder="Title"/>
+		<input id = "searchYr" class="form-control mr-sm-2" type="text" placeholder="Year"/>
+		<br />
+		<button id = "submit" onclick = "searchMovie();">Submit</button><br />
+		<b id = "errMsg"></b>
+		<div id = "movies">
+			<div class = "movieRes">
+				<img class = "poster" src = "" />
+				<div class = "movieInfo"></div>
+			</div>
+			<div class = "movieRes">
+				<img class = "poster" src = "" />
+				<div class = "movieInfo"></div>
+			</div>
+			<div class = "movieRes">
+				<img class = "poster" src = "" />
+				<div class = "movieInfo"></div>
+			</div>
+			<div class = "movieRes">
+				<img class = "poster" src = "" />
+				<div class = "movieInfo"></div>
+			</div>
+			<div class = "movieRes">
+				<img class = "poster" src = "" />
+				<div class = "movieInfo"></div>
+			</div>
+			<div class = "movieRes">
+				<img class = "poster" src = "" />
+				<div class = "movieInfo"></div>
+			</div>
+			<div class = "movieRes">
+				<img class = "poster" src = "" />
+				<div class = "movieInfo"></div>
+			</div>
+			<div class = "movieRes">
+				<img class = "poster" src = "" />
+				<div class = "movieInfo"></div>
+			</div>
+			<div class = "movieRes">
+				<img class = "poster" src = "" />
+				<div class = "movieInfo"></div>
+			</div>
+			<div class = "movieRes">
+				<img class = "poster" src = "" />
+				<div class = "movieInfo"></div>
+			</div>
+		</div>
+	</div>
+</body>
+<script>
+	function searchMovie()
+	{
+		var title = document.getElementById("searchTitle").value;
+		var year = document.getElementById("searchYr").value;
+		var titleReq = new XMLHttpRequest();
+		if (year != "") {
+			var url = "http://www.omdbapi.com/?s="+title+"&y="+year+"&apikey=30c83495";
+		} else {
+			var url = "http://www.omdbapi.com/?s="+title+"&apikey=30c83495";
+		}
+		
+		titleReq.open("GET", url, true);
+		titleReq.onreadystatechange = function()
+		{
+			if (titleReq.readyState == 4)
+			{
+				var res = titleReq.responseText;
+				var matches = JSON.parse(res);
+				currIdx = 0;
+				display(matches);
+				
+				if (matches.Response == "False"){
+					document.getElementById("errMsg").innerHTML = matches.Error + " Try again";
+				}
+				else {
+					document.getElementById("errMsg").innerHTML = "";
+					
+				}
+				
+			}
+		}
+		
+		titleReq.send(null);
+	}
+	function display(matches) {
+		posters = document.getElementsByClassName("poster");
+		infos = document.getElementsByClassName("movieInfo");
+		for (var i = currIdx, mIdx = 0; i < matches.totalResults && mIdx < posters.length; i++) {
+			if (matches.Search[i] != undefined && matches.Search[i].Type == "movie") {
+				if (matches.Search[i].Poster == "N/A") {
+				posters[mIdx].src = "na.jpg";
+				} 
+				else {
+					posters[mIdx].src = matches.Search[i].Poster;
+					infos[mIdx].innerHTML = matches.Search[i].Title+" ("+matches.Search[i].Type+")<br/>"+matches.Search[i].Year+"<br/>imdbID: "+matches.Search[i].imdbID;
+				}
+				mIdx++;
+			}
+			
+		}
+	}
+</script>
+</html>
